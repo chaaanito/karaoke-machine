@@ -37,7 +37,7 @@
 
 <div class="w-full flex flex-row justify-between items-center fixed bottom-0 z-10 p-10">
   <div class="flex flex-col items-center">
-    <img class="rounded-xl shadow-2xl" use:generateQRcode alt="qr-code" />
+    <img class="rounded-xl shadow-2xl" use:generateQRcode id="qr-code" alt="qr-code" />
     <p>+ add song</p>
   </div>
   <div class="flex flex-col">

@@ -1,13 +1,18 @@
 <script>
   import Router from 'svelte-spa-router'
-  import Player from './routes/Player.svelte'
-  import Guest from './routes/Guest.svelte'
   import { Toaster } from 'svelte-sonner'
+  import wrap from 'svelte-spa-router/wrap'
 
   const routes = {
-    '/': Player,
-    '/:id': Guest,
-    '*': Player,
+    '/': wrap({
+      asyncComponent: () => import('./routes/Player.svelte'),
+    }),
+    '/:id': wrap({
+      asyncComponent: () => import('./routes/Guest.svelte'),
+    }),
+    '*': wrap({
+      asyncComponent: () => import('./routes/Player.svelte'),
+    }),
   }
 </script>
 

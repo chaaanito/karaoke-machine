@@ -2,6 +2,7 @@ import Peer from 'peerjs'
 import { toast } from 'svelte-sonner'
 import { db } from './Dexie.svelte'
 import { player } from './Plyr.svelte'
+import { generateQRcode } from './QRcode.svelte'
 
 export const peer = $state({
   current: null,
@@ -17,6 +18,7 @@ export const initiatePeer = async () => {
   peer.current.on('open', (id) => {
     console.log(`Machine ID: ${id}`)
     localStorage.setItem('hostId', id)
+    generateQRcode(document.getElementById('qr-code'))
   })
 
   peer.current.on('connection', (conn) => {
