@@ -3,6 +3,7 @@
   import { initiatePlyr, pause, play, player, stop } from '../scripts/Plyr.svelte'
   import { generateQRcode } from '../scripts/QRcode.svelte'
   import { onDestroy } from 'svelte'
+  import { initiatePeer } from '../scripts/Peer.svelte'
 
   onDestroy(() => player.current?.destroy())
 </script>
@@ -28,6 +29,7 @@
     id="player"
     class="aspect-auto flex items-center justify-center"
     use:initiatePlyr
+    use:initiatePeer
     data-plyr-provider="youtube"
     data-plyr-embed-id={player.nowPlaying}
   ></div>

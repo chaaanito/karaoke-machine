@@ -1,4 +1,5 @@
 import Plyr from 'plyr'
+import { db } from './Dexie.svelte'
 
 export const player = $state({
   current: null,
@@ -6,8 +7,6 @@ export const player = $state({
   playlist: [
     {
       title: 'Never Gonna Give You Up',
-      artist: 'Taylor Swift',
-      album: 'Lover',
       videoId: 'dQw4w9WgXcQ',
     },
   ],
@@ -17,6 +16,12 @@ export const initiatePlyr = async (node) => {
   player.current = new Plyr(node, {
     controls: [],
   })
+
+  player.playlist = await db.songs.toArray()
+
+  if (player.playlist[0]?.videoId) {
+    player.nowPlaying = player.playlist[0]?.videoId
+  }
 
   await updatePlyr(player.nowPlaying)
 }
@@ -31,6 +36,10 @@ export const updatePlyr = async (videoId) => {
       },
     ],
   }
+
+  player.current.once('ready', () => {
+    player.current.play()
+  })
 }
 
 export const play = async () => {
@@ -43,8 +52,19 @@ export const stop = async () => {
   if (player.current) {
     player.current.stop()
 
-    player.playlist.shift()
-    updatePlyr(player.playlist[0]?.videoId || '')
+    if (player.playlist[0]?.videoId) {
+      //update plyr instance
+      updatePlyr(player.playlist[0]?.videoId || '')
+    }
+
+    // Delete the first item in the "items" table
+    const firstItem = await db.songs.orderBy('id').first()
+    if (firstItem) {
+      await db.songs.delete(firstItem.id)
+      player.playlist = await db.songs.toArray()
+    } else {
+      console.log('No items to delete')
+    }
   }
 }
 
