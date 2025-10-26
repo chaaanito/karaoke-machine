@@ -17,7 +17,7 @@
       <Queue songs={peer.songs} />
     </div>
 
-    <input type="radio" name="my_tabs_3" class="tab" aria-label="Song Book" />
-    <div class="tab-content bg-base-100 border-base-300 p-6">Song Book</div>
+    <input type="radio" name="my_tabs_3" class="tab" aria-label="Songbook" />
+    <div class="tab-content bg-base-100 border-base-300 p-6">Songbook</div>
   </div>
 </div>

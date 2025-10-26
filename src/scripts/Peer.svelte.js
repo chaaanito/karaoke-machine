@@ -24,11 +24,13 @@ export const initiatePeer = async () => {
       if (data.type === 'message') {
         toast.success(data.message)
 
+        //send connected message
         conn.send({
           type: 'message',
           message: 'Hello from Host Machine!',
         })
 
+        //send song queue list
         let songlist = await db.songs.toArray()
         if (songlist) {
           conn.send({
@@ -39,13 +41,24 @@ export const initiatePeer = async () => {
       }
 
       if (data.type === 'add' && data['song']) {
+        // add song to queue
         const id = await db.songs.add({
           title: data.song.title,
           cover: data.song.cover,
           videoId: data.song.videoId,
           metadata: data.song.metadata,
         })
+        // add song to songbook
+        const songbook = await db.songbook.add({
+          title: data.song.title,
+          cover: data.song.cover,
+          videoId: data.song.videoId,
+          metadata: data.song.metadata,
+        })
+
         toast.success(`Song: ${data.song.title} - added to queue!`)
+
+        // send added song confirmation
         conn.send({
           type: 'message',
           message: `Song: ${data.song.title} - added to queue!`,
@@ -53,7 +66,10 @@ export const initiatePeer = async () => {
 
         let songlist = await db.songs.toArray()
         if (songlist) {
+          //update song queue in player
           player.playlist = songlist
+
+          //resend to guest the updated song queue
           conn.send({
             type: 'list',
             songs: songlist,
@@ -75,6 +91,7 @@ export const initiateGuestPeer = async (hostId) => {
     peer.connection = conn
 
     conn.on('open', () => {
+      //send message that you are connected!
       conn.send({
         type: 'message',
         message: 'Hello from Guest Machine!',
@@ -86,6 +103,7 @@ export const initiateGuestPeer = async (hostId) => {
         toast.success(data.message)
       }
 
+      //receive songs in queue
       if (data.type === 'list' && data['songs']) {
         peer.songs = data.songs
         addSongModal.close()

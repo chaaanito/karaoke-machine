@@ -4,4 +4,5 @@ export const db = new Dexie('KaraokeMachineDB')
 
 db.version(1).stores({
   songs: `++id, title , cover , videoId, metadata`,
+  songbook: `++id, title , cover , videoId, metadata`,
 })
