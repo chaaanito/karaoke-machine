@@ -101,6 +101,7 @@ export const initiateGuestPeer = async (hostId) => {
     conn.on('data', (data) => {
       if (data.type === 'message') {
         toast.success(data.message)
+        loadingModal.close()
       }
 
       //receive songs in queue

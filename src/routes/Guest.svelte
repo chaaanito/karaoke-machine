@@ -5,6 +5,7 @@
 
   const { params } = $props()
   onMount(() => {
+    loadingModal.showModal()
     initiateGuestPeer(params.id)
   })
 </script>
@@ -21,3 +22,13 @@
     <div class="tab-content bg-base-100 border-base-300 p-6">Songbook</div>
   </div>
 </div>
+
+<dialog id="loadingModal" class="modal">
+  <div class="modal-box">
+    <div class="text-center">
+      <h3 class="text-lg font-bold">Connecting to Host Machine...</h3>
+      <br />
+      <span class="loading loading-ring loading-xl"></span>
+    </div>
+  </div>
+</dialog>
